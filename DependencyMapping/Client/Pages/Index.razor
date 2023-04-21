@@ -8,12 +8,12 @@
 
 <PageTitle>Index</PageTitle>
 
-<div id="canvasHolder" style="position: fixed; background-color: magenta; width: 100%; height: 100%">
+<div id="canvasHolder" style="position: fixed; background-color: white; width: 100%; height: 100%">
     <BECanvas Width="600" Height="400" @ref="_canvasReference"></BECanvas>
 </div>
 
 @code {
-    private Map Map;
+    private Map map = new(new List<IEntity>());
 
     private Canvas2DContext _context;
     protected BECanvasComponent _canvasReference;
@@ -26,36 +26,33 @@
 
     }
 
-    private DateTime LastRender;
-    
     [JSInvokable]
-    public void ResizeInBlazor(double width, double height) => Map.Resize(width, height);
+    public async Task ResizeInBlazor(double width, double height) => await map.Resize(width, height, _context);
 
     [JSInvokable]
     public async ValueTask RenderInBlazor(float timeStamp)
     {
 
-        double fps = 1.0 / (DateTime.Now - LastRender).TotalSeconds;
-        LastRender = DateTime.Now;
-
-        await _context.FillTextAsync($"FPS: {fps:0.000}", 10, 50);
         await _context.BeginBatchAsync();
 
-        double sAngle = 0 * Math.PI;
-        double eAngle = 1.5 * Math.PI;
         //Some logic getting the actual information about the entities we need to create from database.
 
-        var templateOne = new Template("1","template1", 5, 5, 10);
+        var templateOne = new Template("1","template1", 50, 50, 20);
 
-        Map.Entities.Add(templateOne);
 
-        foreach (var entity in Map.Entities)
-        {
-            await _context.SetFillStyleAsync(entity.Color);
-            await _context.ArcAsync(entity.X, entity.Y, entity.Size, sAngle, eAngle);
-            await _context.FillAsync();
-            await _context.StrokeAsync();
-        }
+        var templateCluster = new Cluster();
+        var functionCluster = new Cluster();
+        map.Clusters.Add(templateCluster);
+        map.Clusters.Add(functionCluster);
+
+        map.Entities.Add(templateOne);
+
+        foreach (var cluster in map.Clusters)
+            await cluster.DrawCluster(cluster.X, cluster.Y, _context);
+
+        foreach (var entity in map.Entities)
+            await entity.DrawEntity(entity.X, entity.Y, entity.Size, entity.Color, entity.SAngle, entity.EAngle, _context);
+
         await _context.EndBatchAsync();
     }
 
