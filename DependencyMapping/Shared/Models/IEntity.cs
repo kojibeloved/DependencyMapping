@@ -1,7 +1,4 @@
 ﻿using MongoDB.Bson;
-using Blazor.Extensions;
-using Blazor.Extensions.Canvas; 
-using Blazor.Extensions.Canvas.Canvas2D;
 using SharpCompress.Common;
 
 namespace DependencyMapping.Shared.Models
@@ -18,16 +15,5 @@ namespace DependencyMapping.Shared.Models
         //TODO: Maybe make a list pr entity type, Connections to functions, Data Sources and Connected Services
         public List<ObjectId>? Connections { get; set; }
 
-        public async Task DrawEntity(double x, double y, double size, string color, double sAngle, double eAngle, Canvas2DContext context)
-        {
-            await context.BeginPathAsync();
-            await context.SetFillStyleAsync(color);
-            await context.SetStrokeStyleAsync("black");
-            await context.SetLineWidthAsync(1);
-            await context.ArcAsync(x, y, size, sAngle, eAngle);
-            await context.StrokeAsync();
-            await context.FillAsync();
-            //fill should close path by itself
-        }
     }
 }
