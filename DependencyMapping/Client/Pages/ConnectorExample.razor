@@ -1,24 +1,23 @@
 ﻿@using static DependencyMapping.Client.Components.Connector
 @inject MouseService mouseSrv;
 
-<div class="row mt-2">
-    <div class="col">
-        <svg class="bg-light" width="100%" height="500" xmlns="http://www.w3.org/2000/svg"
-            @onmousemove=@(e => mouseSrv.FireMove(this, e))
-            @onmouseup=@(e => mouseSrv.FireUp(this, e))
-            @onmouseleave=@(e => mouseSrv.FireLeave(this, e))>
+<div>
+    <svg class="bg-light" width="100%" height="500" xmlns="http://www.w3.org/2000/svg"
+        @onmousemove=@(e => mouseSrv.FireMove(this, e))
+        @onmouseup=@(e => mouseSrv.FireUp(this, e))
+        @onmouseleave=@(e => mouseSrv.FireLeave(this, e))>
 
-            @foreach(var plt in plants){
+        @foreach(var plt in plants){
 
-                <Draggable @bind-X=plt.X @bind-Y=plt.Y>
-                    <circle r="@plt.R" fill="@plt.Fill" stroke="#fff" />
-                </Draggable>
-                <Connector X1=plt.RootX Y1=450 Dir1=Connector.Direction.Top X2=plt.X Y2=plt.ConnectY Dir2=plt.Dir />
+            <Draggable @bind-X=plt.X @bind-Y=plt.Y>
+                <circle r="@plt.R" fill="@plt.Fill" stroke="#fff" />
+            </Draggable>
+            <Connector X1=plt.RootX Y1=450 Dir1=Connector.Direction.Top X2=plt.X Y2=plt.ConnectY Dir2=plt.Dir />
 
-            }
+        }
 
-        </svg>
-    </div>
+    </svg>
+
 </div>
 
 @code {

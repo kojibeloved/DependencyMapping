@@ -1,0 +1,77 @@
+﻿@inject IMouseService mouseSrv;
+ 
+<g transform="translate(@x, @y)" cursor=@cursor @onmousedown=OnDown 
+   @onmousedown:stopPropagation="true">
+    @ChildContent
+</g>
+
+@code {
+    [Parameter] public RenderFragment? ChildContent { get; set; }
+
+
+    double? x;
+    [Parameter]
+    public double X { 
+        get { return x ?? 0; }
+        set { if (!x.HasValue || (!toggled & XChanged.HasDelegate)) { x = value; } } 
+    }
+    [Parameter] public EventCallback<double> XChanged { get; set; }
+
+    double? y;
+    [Parameter]
+    public double Y {
+        get { return y ?? 0; }
+        set { if (!y.HasValue || (!toggled & YChanged.HasDelegate)) { y = value; } }
+    }
+    [Parameter] public EventCallback<double> YChanged { get; set; }
+
+
+    protected override void OnInitialized() {
+        mouseSrv.OnMove += OnMove;
+        mouseSrv.OnUp += OnUpLeave;
+        mouseSrv.OnLeave += OnUpLeave;
+        base.OnInitialized();
+    }
+
+
+    string cursor = "Toggle";
+    bool _toggled;
+    bool toggled {
+        get { return _toggled; }
+        set {
+            _toggled = value;
+            cursor = _toggled ? "toggling" : "toggle";
+        }
+    }
+
+    double cursorX;
+    double cursorY;
+    void OnDown(MouseEventArgs e) {
+        toggled = true;
+        cursorX = e.ClientX;
+        cursorY = e.ClientY;
+    }
+
+    void OnUpLeave(object? _, MouseEventArgs e) 
+        => toggled = false;
+
+    void OnMove(object? _, MouseEventArgs e) {
+        if (!toggled)
+            return;
+
+        x = x - (cursorX - e.ClientX);
+        y = y - (cursorY - e.ClientY);
+
+        cursorX = e.ClientX;
+        cursorY = e.ClientY;
+
+        XChanged.InvokeAsync(x.Value);
+        YChanged.InvokeAsync(y.Value);
+    }
+
+    public void Dispose() {
+        mouseSrv.OnMove -= OnMove;
+        mouseSrv.OnUp -= OnUpLeave;
+        mouseSrv.OnLeave -= OnUpLeave;
+    }
+}

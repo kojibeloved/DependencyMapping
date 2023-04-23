@@ -1,0 +1,61 @@
+﻿@using System.ComponentModel.Design.Serialization
+@inject MouseService mouseSrv;
+
+<Panzoom WheelMode="WheelMode.ZoomWithWheel">
+    <!-- Must set the element's reference (@ref)! -->
+    <div id="universeHolder" class="h-100 w-100">
+        <svg @ref="@context.ElementReference" class="bg-light" width="400" height="600" xmlns="http://www.w3.org/2000/svg"
+             @onmousemove=@(e => mouseSrv.FireMove(this, e))
+             @onmouseup=@(e => mouseSrv.FireUp(this, e))
+             @onmouseleave=@(e => mouseSrv.FireLeave(this, e))>
+
+            <style>
+                text {
+                    -webkit-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+                    fill: #333333;
+                }
+
+                .sun-title {
+                    fill: #fff;
+                    pointer-events: none !important;
+                }
+
+                .sun {
+                    fill: #ff6600;
+                    stroke: #fff;
+                    stroke-width: 1;
+                }
+            </style>
+
+            <Draggable @bind-X=X @bind-Y=Y>
+                <Sun />
+
+                <Draggable X=173 Y=-15>
+                    <circle r="35" fill="#1aaee5" stroke="#fff" />
+                    <Draggable X=-57 Y=-38>
+                        <text>Earth</text>
+                    </Draggable>
+
+                    <Draggable X=51 Y=-25>
+                        <circle r="15" fill="#04dcd2" stroke="#fff" />
+                        <Draggable X=-5 Y=-20>
+                            <text>Moon</text>
+                        </Draggable>
+                    </Draggable>
+                </Draggable>
+
+            </Draggable>
+
+        </svg>
+    </div>
+</Panzoom>
+
+
+@code {
+    double X = 290;
+    double Y = 250;
+}

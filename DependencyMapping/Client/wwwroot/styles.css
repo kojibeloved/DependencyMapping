@@ -1,0 +1,27 @@
+﻿html, body, svg, app, container, mt-2 {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+.bg-light, text {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    fill: #333333;
+}
+    
+
+.sun-title {
+    fill: #fff;
+    pointer-events: none !important;
+}
+
+.sun {
+    fill: #ff6600;
+    stroke: #fff;
+    stroke-width: 1;
+}
