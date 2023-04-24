@@ -10,19 +10,5 @@ namespace DependencyMapping.Client.Components
         public double Height { get; private set; }
         public double DistanceBetweenClusters = 50;
         public List<Cluster> Clusters = new();
-
-
-        public Map()
-        {
-            
-        }
-
-        public void MapCoordinatesOfEntities()
-        {
-
-        }
-
-        public void Resize(double width, double height) => (Width, Height) = (width, height);
-
     }
 }

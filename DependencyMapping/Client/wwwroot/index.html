@@ -28,23 +28,8 @@
     <script src="_framework/blazor.webassembly.js"></script>
     <script src="_content/BlazorPanzoom/panzoom.min.js"></script>
     <script src="_content/BlazorPanzoom/blazorpanzoom.js"></script>
-    <script>
-        function resizeMapToFitWindow() {
-            var holder = document.getElementById('universeHolder');
-            var svg = holder.querySelector('svg');
-            if (svg) {
-                svg.width = window.innerWidth;
-                svg.height = window.innerHeight;
-                theInstance.invokeMethodAsync('ResizeInBlazor', svg.width, svg.height);
-            }
-        }
 
-        window.initRenderJS = (instance) => {
-            window.theInstance = instance;
-            window.addEventListener("resize", resizeMapToFitWindow);
-            resizeMapToFitWindow();
-        };
-    </script>
+    
 </body>
 
 </html>

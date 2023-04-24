@@ -1,21 +1,16 @@
 ﻿@page "/"
 @inject IJSRuntime JsRuntime;
 
-<PageTitle>Blazor Draggable Demo</PageTitle>
-
 <div class="h-100 w-100">
     <Universe />
 </div>
 
 @code{
-    private Map _map = new();
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
-        await base.OnInitializedAsync();
-    }
-
-    [JSInvokable]
-    public void ResizeInBlazor(double width, double height) => _map.Resize(width, height);
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
+    //    await base.OnInitializedAsync();
+    //}
+    
 }
