@@ -2,34 +2,34 @@
 @inject MouseService mouseSrv;
 
 <div id="universeHolder" class="h-100 w-100">
-    <Panzoom @ref="_panzoom" WheelMode="WheelMode.ZoomWithWheel">
-    <!-- Must set the element's reference (@ref)! -->
-        <svg @ref="@context.ElementReference" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"
-             @onmousemove=@(e => mouseSrv.FireMove(this, e))
-             @onmouseup=@(e => mouseSrv.FireUp(this, e))
-             @onmouseleave=@(e => mouseSrv.FireLeave(this, e))>
+    <svg class="h-100 w-100" xmlns="http://www.w3.org/2000/svg"
+         @onmousemove=@(e => mouseSrv.FireMove(this, e))
+         @onmouseup=@(e => mouseSrv.FireUp(this, e))
+         @onmouseleave=@(e => mouseSrv.FireLeave(this, e))>
+        <Panzoom @ref="_panzoom" WheelMode="WheelMode.ZoomWithWheel">
+            <!-- Must set the element's reference (@ref)! -->
+            <g @ref="@context.ElementReference">
+                <Draggable @bind-X=X @bind-Y=Y>
+                    <Sun />
 
-            <Draggable @bind-X=X @bind-Y=Y>
-                <Sun />
+                    <Draggable X=173 Y=-15>
+                        <circle r="35" fill="#1aaee5" stroke="#fff" />
+                        <Draggable X=-57 Y=-38>
+                            <text>Earth</text>
+                        </Draggable>
 
-                <Draggable X=173 Y=-15>
-                    <circle r="35" fill="#1aaee5" stroke="#fff" />
-                    <Draggable X=-57 Y=-38>
-                        <text>Earth</text>
-                    </Draggable>
-
-                    <Draggable X=51 Y=-25>
-                        <circle r="15" fill="#04dcd2" stroke="#fff" />
-                        <Draggable X=-5 Y=-20>
-                            <text>Moon</text>
+                        <Draggable X=51 Y=-25>
+                            <circle r="15" fill="#04dcd2" stroke="#fff" />
+                            <Draggable X=-5 Y=-20>
+                                <text>Moon</text>
+                            </Draggable>
                         </Draggable>
                     </Draggable>
+
                 </Draggable>
-
-            </Draggable>
-
-        </svg>
-    </Panzoom>
+            </g>
+       </Panzoom>    
+    </svg>
 </div>
 
 
@@ -38,6 +38,7 @@
     double Y = 250;
 
     private Panzoom _panzoom;
+    private PanzoomOptions _options = new() {Canvas = true};
 
     private async Task OnWheel(CustomWheelEventArgs args)
     {

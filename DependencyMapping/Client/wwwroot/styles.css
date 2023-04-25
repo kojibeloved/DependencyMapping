@@ -5,9 +5,11 @@
     margin: 0;
 }
 
-.svg {
+svg {
     fill: aqua;
-    background-color: gray;
+    background-color: green;
+    width: 100vw;
+    height: 100vh;
 }
 .bg-light, text {
     -webkit-user-select: none;
