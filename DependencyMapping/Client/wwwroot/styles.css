@@ -34,7 +34,7 @@ svg {
 }
 
 .entity {
-    fill: #ff6600;
+    /*fill: #ff6600;*/
     stroke: #fff;
     stroke-width: 1;
 }

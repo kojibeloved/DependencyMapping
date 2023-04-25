@@ -1,7 +1,40 @@
-﻿<circle r="60" class="entity" />
-<text text-anchor="middle" alignment-baseline="central" class="pe-none entity-title">EntityName</text>
+﻿@using System.Drawing
+<g transform="translate(@x, @y)">
+    <circle r="60" class="entity" style="fill: @Color"/>
+    <text text-anchor="middle" alignment-baseline="central" class="pe-none entity-title">EntityName</text>
+</g>
 
 @code
 {
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    double? x;
+
+    [Parameter]
+    public string Color { get; set; }
+
+    [Parameter]
+    public double X
+    {
+        get { return x ?? 0; }
+        set => x = value;
+    }
+
+    [Parameter]
+    public EventCallback<double> XChanged { get; set; }
+
+    double? y;
+
+    [Parameter]
+    public double Y
+    {
+        get { return y ?? 0; }
+        set => y= value;
+    }
+
+    [Parameter]
+    public EventCallback<double> YChanged { get; set; }
 
 }

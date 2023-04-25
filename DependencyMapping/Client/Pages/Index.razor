@@ -10,14 +10,21 @@
     <Panzoom @ref="_panzoom" WheelMode="WheelMode.ZoomWithWheel">
         <!-- Must set the element's reference (@ref)! -->
         <g @ref="@context.ElementReference">
-            <Entity/>
+            <Entity @bind-X=e1x @bind-Y=e1y Color="@e1Color"/>
+            <Entity @bind-X=e2x @bind-Y=e2y Color="@e2Color"/>
         </g>
     </Panzoom>    
 </svg>
 
 @code {
-    //double X = 290;
-    //double Y = 250;
+    double e1x = 290;
+    double e1y = 250;
+
+    double e2x = 1090;
+    double e2y = 350;
+
+    string e1Color = "green";
+    string e2Color = "red";
 
     //protected override async Task OnAfterRenderAsync(bool firstRender)
     //{
