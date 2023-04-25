@@ -1,16 +1,40 @@
 ﻿@page "/"
 @inject IJSRuntime JsRuntime;
+@using System.ComponentModel.Design.Serialization
+@inject MouseService mouseSrv;
 
-<div class="h-100 w-100">
-    <Universe />
-</div>
+<svg id="universeHolder" class="h-100 w-100 halftone" xmlns="http://www.w3.org/2000/svg"
+     @onmousemove=@(e => mouseSrv.FireMove(this, e))
+     @onmouseup=@(e => mouseSrv.FireUp(this, e))
+     @onmouseleave=@(e => mouseSrv.FireLeave(this, e))>
+    <Panzoom @ref="_panzoom" WheelMode="WheelMode.ZoomWithWheel">
+        <!-- Must set the element's reference (@ref)! -->
+        <g @ref="@context.ElementReference">
+            <Entity/>
+        </g>
+    </Panzoom>    
+</svg>
 
-@code{
+@code {
+    //double X = 290;
+    //double Y = 250;
 
     //protected override async Task OnAfterRenderAsync(bool firstRender)
     //{
     //    await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
     //    await base.OnInitializedAsync();
     //}
-    
+
+    private Panzoom _panzoom;
+    //private PanzoomOptions _options = new() {Canvas = true};
+
+    //private async Task OnWheel(CustomWheelEventArgs args)
+    //{
+    //    await _panzoom.ZoomWithWheelAsync(args);
+    //}
+
+    //private async Task OnSetTransform(SetTransformEventArgs eventArgs)
+    //{
+    //    await _panzoom.SetStyleAsync("transform", $"rotate({eventArgs.X / 20}deg) scale({eventArgs.Scale}) translate({eventArgs.X}px, {eventArgs.Y}px)");
+    //}
 }

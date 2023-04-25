@@ -7,10 +7,17 @@
 
 svg {
     fill: aqua;
-    background-color: green;
+    background-color: lightgray;
     width: 100vw;
     height: 100vh;
 }
+
+.halftone {
+    background-image: radial-gradient( circle at center, black 0.119rem, transparent 0% );
+    background-size: 4rem 4rem;
+    background-position: 0 0, 0rem 0rem;
+}
+
 .bg-light, text {
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -21,12 +28,12 @@ svg {
 }
     
 
-.sun-title {
+.entity-title {
     fill: #fff;
     pointer-events: none !important;
 }
 
-.sun {
+.entity {
     fill: #ff6600;
     stroke: #fff;
     stroke-width: 1;
