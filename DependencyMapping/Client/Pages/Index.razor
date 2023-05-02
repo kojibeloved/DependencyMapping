@@ -1,38 +1,56 @@
 ﻿@page "/"
 @inject IJSRuntime JsRuntime;
 @using System.ComponentModel.Design.Serialization
+@using DependencyMapping.Shared.Models
 @inject MouseService mouseSrv;
 
-<svg id="universeHolder" class="h-100 w-100 halftone" xmlns="http://www.w3.org/2000/svg"
+<svg id="universeHolder" class="h-100 w-100" xmlns="http://www.w3.org/2000/svg"
      @onmousemove=@(e => mouseSrv.FireMove(this, e))
      @onmouseup=@(e => mouseSrv.FireUp(this, e))
      @onmouseleave=@(e => mouseSrv.FireLeave(this, e))>
     <Panzoom @ref="_panzoom" WheelMode="WheelMode.ZoomWithWheel">
         <!-- Must set the element's reference (@ref)! -->
         <g @ref="@context.ElementReference">
-            <Entity @bind-X=e1x @bind-Y=e1y Color="@e1Color"/>
-            <Entity @bind-X=e2x @bind-Y=e2y Color="@e2Color"/>
+            <Cluster CenterX="100" CenterY="100"/>
         </g>
     </Panzoom>    
 </svg>
 
 @code {
-    double e1x = 290;
-    double e1y = 250;
+    private Panzoom _panzoom;
 
-    double e2x = 1090;
-    double e2y = 350;
 
-    string e1Color = "green";
-    string e2Color = "red";
+    //stats for circles
+    //static double e1x = 290;
+    //double e1y = 250;
+
+    //static double e2x = 1090;
+    //double e2y = 850;
+
+    //string e1Color = "green";
+    //string e2Color = "red";
+
+    //double surfaceX = e1x + radius;
+    //double surfaceX2 = e2x - radius;
+
+    //public static double radius = 55;
+
+    //public double X;
+    //public double Y;
+    //public double R;
+    //public Connector.Direction Dir;
+    //public double RootX;
+    //public string Fill = "#333";
+
+
+    //public double ConnectY => Dir == Connector.Direction.Left ? Y - R : Y + R;
+    
 
     //protected override async Task OnAfterRenderAsync(bool firstRender)
     //{
     //    await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
     //    await base.OnInitializedAsync();
     //}
-
-    private Panzoom _panzoom;
     //private PanzoomOptions _options = new() {Canvas = true};
 
     //private async Task OnWheel(CustomWheelEventArgs args)

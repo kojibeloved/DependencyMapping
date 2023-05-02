@@ -1,0 +1,51 @@
+﻿@using System.Drawing
+@using Amazon.Runtime.Internal
+@using DependencyMapping.Shared.Models
+
+<g transform="translate(@CenterX, @CenterY)">
+    @foreach (var template in _templateList)
+    {
+        <Entity Id="template.Id" X="@template.X" Y="@template.Y" Color="@template.Color" Radius="@template.Size"/>
+    }
+</g>
+
+@code {
+
+    [Parameter] 
+    public double CenterX { get; set; }
+    
+    [Parameter]
+    public double CenterY { get; set; }
+
+    private List<Template> _templateList = new();
+
+    private List<Entity> _entityList = new();
+
+    public void AddEntity(Entity entity)
+    {
+        _entityList.Add(entity);
+    }
+
+    public double SpiralVariable = 1;
+
+    protected override void OnInitialized()
+    {
+        for (var i = 0; i <= 2000; i++)
+        {
+            _templateList.Add(new Template(new Guid(), PlaceX(SpiralVariable), PlaceY(SpiralVariable), 2));
+            SpiralVariable += 50;
+        }
+    }
+
+    //make a archimedean spiral
+    public double PlaceX(double k)
+    {
+        return Double.Sqrt(k) * Double.Cos(Double.Sqrt(k));
+    }
+
+    public double PlaceY(double k)
+    {
+        return Double.Sqrt(k) * Double.Sin(Double.Sqrt(k));
+    }
+    
+}

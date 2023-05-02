@@ -1,11 +1,17 @@
 ﻿@using System.Drawing
+@using Amazon.Runtime.Internal
 <g transform="translate(@x, @y)">
-    <circle r="60" class="entity" style="fill: @Color"/>
-    <text text-anchor="middle" alignment-baseline="central" class="pe-none entity-title">EntityName</text>
+    <circle r="@Radius" class="entity" style="fill: @Color"/>
 </g>
 
 @code
 {
+
+    [Parameter]
+    public Guid Id { get; set; }
+
+    [Parameter]
+    public double Radius { get; set; }
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
@@ -22,8 +28,8 @@
         set => x = value;
     }
 
-    [Parameter]
-    public EventCallback<double> XChanged { get; set; }
+    //[Parameter]
+    //public EventCallback<double> XChanged { get; set; }
 
     double? y;
 
@@ -34,7 +40,19 @@
         set => y= value;
     }
 
-    [Parameter]
-    public EventCallback<double> YChanged { get; set; }
+    //[Parameter]
+    //public EventCallback<double> YChanged { get; set; }
+
+    public Connector.Direction DeterminePositionOfConnection(double x1, double y1, double x2, double y2)
+    {
+        if (x1 < x2 && y1 < y2)
+            return Connector.Direction.Left;
+        else if (x1 > x2 && y1 > y2)
+            return Connector.Direction.Right;
+        else if (x1 < x2 && y1 > y2)
+            return Connector.Direction.Top;
+
+        return Connector.Direction.Bottom;
+    }
 
 }

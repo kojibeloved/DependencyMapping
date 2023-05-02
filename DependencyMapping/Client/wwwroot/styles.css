@@ -29,12 +29,12 @@ svg {
     
 
 .entity-title {
-    fill: #fff;
+    fill: black;
     pointer-events: none !important;
 }
 
 .entity {
     /*fill: #ff6600;*/
-    stroke: #fff;
+    stroke: black;
     stroke-width: 1;
 }

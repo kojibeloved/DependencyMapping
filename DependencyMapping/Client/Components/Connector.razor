@@ -1,4 +1,4 @@
-﻿<path d="M @X1 @Y1 C @c1x @c1y, @c2x @c2y, @X2 @Y2" stroke="rgb(108, 117, 125)" stroke-width="1.5" fill="transparent" style="pointer-events:none !important;" />
+﻿<path d="M @X1 @Y1 C @c1x @c1y, @c2x @c2y, @X2 @Y2" stroke="rgb(108, 117, 125)" stroke-width="2.0" fill="transparent" style="pointer-events:none !important;" />
 
 @code {
     [Parameter] public Direction Dir1 { get; set; } = Direction.Right;
@@ -25,7 +25,7 @@
         base.OnParametersSet();
     }
 
-    const int coef = 70;
+    const int coef = 500;
 
     static double cx(Direction dir, double x)
         => (dir == Direction.Right || dir == Direction.Left)

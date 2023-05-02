@@ -8,9 +8,10 @@ namespace DependencyMapping.Shared.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get;}
+        public Guid Id { get; set; }
+
         [Required]
-        public string FileName { get;}
+        public string? FileName { get;}
         public List<ObjectId>? Connections { get; set; }
 
         public double X { get; set; }
@@ -18,10 +19,10 @@ namespace DependencyMapping.Shared.Models
         public double Size { get; set; }
         public string Color { get; set; }
 
-        public Template(string id, string fileName, double x, double y, int size)
+        public Template(Guid id, double x, double y, int size)
         {
             Id = id;
-            FileName = fileName;
+            
             X = x;
             Y = y;
             Size = size;
