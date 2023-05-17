@@ -34,10 +34,7 @@
 
     [CascadingParameter(Name = "FClusterCenterY")]
     public double FCenterY { get; set; }
-
-    [CascadingParameter(Name = "IsHovered")]
-    public bool IsHovered { get; set; }
-
+    
     [Parameter]
     public Dictionary<Guid, Template> Templates { get; set; }
 
@@ -51,6 +48,7 @@
     public double SpiralVariable = 1;
 
     public bool IsClear = false;
+
     public int DoneCounter = 0;
 
     protected override bool ShouldRender()
@@ -76,22 +74,6 @@
         Color = "red";
         Radius = 4;
         Padding = 5;
-
-
-    //var radius = 4;
-    //var padding = 5;
-    //for (var i = 0; i <= 2; i++)
-    //{
-    //    while (Templates.Values.Any(k => ComponentHelper.Distance(ComponentHelper.PlaceX(SpiralVariable), ComponentHelper.PlaceY(SpiralVariable), k.X, k.Y)
-    //                                     < k.Size + radius + padding))
-    //    {
-    //        SpiralVariable++;
-    //    }
-    //    var template = new Template(ComponentHelper.PlaceX(SpiralVariable), ComponentHelper.PlaceY(SpiralVariable), 4);
-    //    Templates.Add(Guid.NewGuid(), template);
-    //    if (i % 50 == 0)
-    //        radius++;
-    //}
     }
     
 }

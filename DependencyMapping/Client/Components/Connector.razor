@@ -43,39 +43,18 @@
 
     double c2x;
     double c2y;
-
-    protected override bool ShouldRender()
-    {
-        //if (IsHovered)
-        //{
-        //    DisplayState = "display: block;";
-        //    return true;
-        //}
-
-        //else
-        //{
-        //    DisplayState = "display: none;";
-        //    return false;
-        //}
-        
-        return base.ShouldRender();
-    }
+    
 
     public void ShowDependency()
     {
         DisplayState = "display: block;";
-        ShouldRender();
+        //ShouldRender();
     }
 
     public void HideDependency()
     {
         DisplayState = "display: none;";
-        ShouldRender();
-    }
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
+        //ShouldRender();
     }
 
     protected override void OnParametersSet() {
