@@ -1,0 +1,22 @@
+﻿rect {
+    position: relative;
+    background: black;
+    opacity: 0.5;
+    fill: black;
+}
+
+/*rect {
+    position: relative;
+    height: 30px;
+    width: 15px;
+    -webkit-appearance: none;
+    background: black;
+    outline: white;
+    border-radius: 15px;
+    opacity: 0.5;
+    display: none;
+    rx: 15;
+}
+    rect:active {
+        display: block;
+    }*/

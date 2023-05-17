@@ -4,8 +4,14 @@
 @using DependencyMapping.Shared.Models
 @using Microsoft.JSInterop;
 @inject IJSRuntime JsRuntime;
-
-<circle r="@Radius" stroke="black" stroke-width="1" fill="@Color" cx="@X" cy="@Y"/>
+<g @onclick="ToggleMenu">
+    <circle r="@Radius" stroke="black" stroke-width="1" fill="@Color" cx="@X" cy="@Y"/>
+    <CascadingValue Value="X" Name="X">
+        <CascadingValue Value="Y" Name="Y">
+            <EntityMenu @ref="menuRef"/>
+        </CascadingValue>
+    </CascadingValue>
+</g>
 
 @code
 {
@@ -23,10 +29,28 @@
     [Parameter]
     public double X { get; set; }
 
+    public EntityMenu menuRef { get; set; } = new ();
+
+    public bool Toggled { get; set; } = false;
+
     double? y;
+
+    //bool Toggled;
 
     [Parameter]
     public double Y { get; set; }
+
+    public void ToggleMenu()
+    {
+        if (!Toggled)
+        {
+            menuRef.ShowDependency();
+        }
+        else
+            menuRef.HideDependency();
+        //menuRef.DisplayState = !Toggled ? "block" : "none";
+        Toggled = !Toggled;
+    }
 
     public Connector.Direction DeterminePositionOfConnection(double x1, double y1, double x2, double y2)
     {

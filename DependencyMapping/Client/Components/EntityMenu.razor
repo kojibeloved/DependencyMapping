@@ -1,0 +1,41 @@
+﻿@using Amazon.Runtime.Internal
+
+<rect x="@X" y="@Y" rx="15" width="15" height="30" display="@DisplayState"/>
+
+@code {
+    //[Parameter]
+    //public EventCallback<bool> ValueChanged { get; set; }
+
+    public string DisplayState { get; set; } = "block";
+
+    [CascadingParameter(Name = "X")] 
+    public double X { get; set; }
+
+    [CascadingParameter(Name = "Y")]
+    public double Y { get; set; }
+
+    //even though we access the methods below and succesfully update the displayState value, we don't change the actual value inside the html for some reason.
+    public void ShowDependency()
+    {
+        DisplayState = "block";
+    }
+
+    public void HideDependency()
+    {
+        DisplayState = "none";
+    }
+    //private bool _value;
+    //[Parameter]
+    //public bool Value
+    //{
+    //    get { return _value; }
+    //    set
+    //    {
+    //        if (_value != value)
+    //        {
+    //            _value = value;
+    //            ValueChanged.InvokeAsync(_value);
+    //        }
+    //    }
+    //}
+}
