@@ -1,0 +1,107 @@
+﻿@using System.Drawing;
+@using System;
+@using System.Collections
+@using System.Collections.Generic;
+@using Amazon.Runtime.Internal
+@using DependencyMapping.Client.Components
+@using DependencyMapping.Client.Helpers
+@using DependencyMapping.Client.Models
+@using Microsoft.JSInterop;
+
+
+<g transform="translate(@FCenterX, @FCenterY)">
+    @foreach (KeyValuePair<Guid, CustomFunction> function in Functions)
+    {
+        DoneCounter++;
+        ShouldRender();
+        @if (Functions.Values.Any(k => ComponentHelper.Distance(ComponentHelper.PlaceX(SpiralVariable),
+            ComponentHelper.PlaceY(SpiralVariable), k.X, k.Y) < Radius + Padding))
+        {
+            IncrementSpiral(function.Value);
+        }
+        <g @onmouseover="@function.Value.ShowDependencies" @onmouseout="@function.Value.HideDependencies">
+            <Circle X="function.Value.X" Y="function.Value.Y" Radius="@Radius" Color="@Color"/>
+        </g>
+
+    }
+</g>
+
+@code {
+
+    [CascadingParameter(Name = "TClusterCenterX")]
+    protected double TCenterX { get; set; }
+
+    [CascadingParameter(Name = "TClusterCenterY")]
+    protected double TCenterY { get; set; }
+
+    [CascadingParameter(Name = "FClusterCenterX")]
+    public double FCenterX { get; set; }
+
+    [CascadingParameter(Name = "FClusterCenterY")]
+    public double FCenterY { get; set; }
+
+    [CascadingParameter(Name="IsHovered")]
+    public bool IsHovered { get; set; }
+
+    [Parameter]
+    public Dictionary<Guid, CustomFunction> Functions { get; set; }
+
+    [Inject] 
+    private IJSRuntime jsRuntime { get; set; }
+
+    public string DisplayState { get; set; }
+
+    public string Color { get; set; }
+    public double Radius { get; set; }
+
+    public double SpiralVariable = 1;
+    public int DoneCounter = 0;
+    public double Padding { get; set; }
+    
+    protected override bool ShouldRender()
+    {
+        if (DoneCounter >= Functions.Count)
+            return false;
+        return base.ShouldRender();
+    }
+
+    private void IncrementSpiral(IEntity entity)
+    {
+        while (Functions.Values.Any(k => ComponentHelper.Distance(ComponentHelper.PlaceX(SpiralVariable), ComponentHelper.PlaceY(SpiralVariable), k.X, k.Y)
+                                         < Radius + Padding))
+        {
+            SpiralVariable += Radius + Padding;
+        }
+        entity.X = ComponentHelper.PlaceX(SpiralVariable);
+        entity.Y = ComponentHelper.PlaceY(SpiralVariable);
+    }
+
+    protected override void OnInitialized()
+    {
+        Color = "green";
+        Radius = 4;
+        Padding = 5;
+    //remove template for loop when proper entity initialization has been established
+    //TemplateEnumerator = Templates.GetEnumerator();
+    //var radius = 4;
+    //var padding = 5;
+    //for (var i = 0; TemplateEnumerator.MoveNext(); i++)
+    //{
+    //    if (Functions.Count > 0)
+    //    {
+    //        while (Functions.Values.Any(k => ComponentHelper.Distance(ComponentHelper.PlaceX(SpiralVariable), ComponentHelper.PlaceY(SpiralVariable), k.X, k.Y) 
+    //                                         < k.Size + radius + padding))
+    //            SpiralVariable++;
+
+    //    }
+    //    var function = new Entity(ComponentHelper.PlaceX(SpiralVariable), ComponentHelper.PlaceY(SpiralVariable), radius);
+
+    //    if (i % 2 == 0){
+    //        function.Connections.Add(TemplateEnumerator.Current.Key);
+    //    }
+
+    //    Functions.Add(Guid.NewGuid(), function);
+    //}
+    //TemplateEnumerator.Dispose();
+    }
+}

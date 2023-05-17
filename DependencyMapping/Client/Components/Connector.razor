@@ -1,19 +1,82 @@
-﻿<path d="M @X1 @Y1 C @c1x @c1y, @c2x @c2y, @X2 @Y2" stroke="rgb(108, 117, 125)" stroke-width="2.0" fill="transparent" style="pointer-events:none !important;" />
+﻿@using Amazon.Runtime.Documents
+@using DependencyMapping.Client.Helpers
+@using MongoDB.Bson.Serialization.Serializers
+
+<path d="M @X1 @Y1 C @c1x @c1y, @c2x @c2y, @X2 @Y2" stroke="gray" stroke-width="1" fill="none" style="@DisplayState"/>
 
 @code {
-    [Parameter] public Direction Dir1 { get; set; } = Direction.Right;
-    [Parameter] public double X1 { get; set; }
-    [Parameter] public double Y1 { get; set; }
+    [CascadingParameter(Name="FClusterCenterX")]
+    public double FClusterX { get; set; }
+    [CascadingParameter(Name = "FClusterCenterY")]
+    public double FClusterY { get; set; }
+    [CascadingParameter(Name = "TClusterCenterX")]
+    public double TClusterX { get; set; }
+    [CascadingParameter(Name = "TClusterCenterY")]
+    public double TClusterY { get; set; }
 
-    [Parameter] public Direction Dir2 { get; set; } = Direction.Left;
-    [Parameter] public double X2 { get; set; }
-    [Parameter] public double Y2 { get; set; }
 
+
+    [Parameter]
+    public Direction Dir1 { get; set; }
+    [Parameter]
+    public double X1 { get; set; }
+    [Parameter]
+    public double Y1 { get; set; }
+    [Parameter]
+    public Direction Dir2 { get; set; }
+    [Parameter]
+    public double X2 { get; set; }
+    [Parameter]
+    public double Y2 { get; set; }
+    //[Parameter]
+    //public string DisplayState { get; set; } = "display: none;";
+
+    [CascadingParameter(Name="IsHovered")]
+    public bool IsHovered { get; set; }
+
+    public string DisplayState { get; set; } = "display: none;";
+
+    private Connector connectorRef;
+    
     double c1x;
     double c1y;
 
     double c2x;
     double c2y;
+
+    protected override bool ShouldRender()
+    {
+        //if (IsHovered)
+        //{
+        //    DisplayState = "display: block;";
+        //    return true;
+        //}
+
+        //else
+        //{
+        //    DisplayState = "display: none;";
+        //    return false;
+        //}
+        
+        return base.ShouldRender();
+    }
+
+    public void ShowDependency()
+    {
+        DisplayState = "display: block;";
+        ShouldRender();
+    }
+
+    public void HideDependency()
+    {
+        DisplayState = "display: none;";
+        ShouldRender();
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+    }
 
     protected override void OnParametersSet() {
         c1x = cx(Dir1, X1);
@@ -25,7 +88,7 @@
         base.OnParametersSet();
     }
 
-    const int coef = 500;
+    const int coef = 10;
 
     static double cx(Direction dir, double x)
         => (dir == Direction.Right || dir == Direction.Left)

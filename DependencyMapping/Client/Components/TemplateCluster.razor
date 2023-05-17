@@ -1,0 +1,97 @@
+﻿@using System.Drawing
+@using Amazon.Runtime.Internal
+@using DependencyMapping.Client.Components
+@using DependencyMapping.Client.Helpers
+@using DependencyMapping.Client.Models
+
+<g transform="translate(@TCenterX, @TCenterY)">
+    @foreach (KeyValuePair <Guid, Template> template in Templates)
+    {
+        DoneCounter++;
+        ShouldRender();
+        @if (Templates.Values.Any(k => ComponentHelper.Distance(ComponentHelper.PlaceX(SpiralVariable), ComponentHelper.PlaceY(SpiralVariable), k.X, k.Y)
+                                       < Radius + Padding))
+        {
+            IncrementSpiral(template.Value);
+        }
+        <g @onmouseover="@template.Value.ShowDependencies" @onmouseout="@template.Value.HideDependencies">
+            <Circle X="template.Value.X" Y="template.Value.Y" Radius="@Radius" Color="@Color"/>
+        </g>
+
+    }
+</g>
+
+@code {
+
+    [CascadingParameter(Name = "TClusterCenterX")]
+    protected double TCenterX { get; set; }
+
+    [CascadingParameter(Name = "TClusterCenterY")]
+    protected double TCenterY { get; set; }
+
+    [CascadingParameter(Name= "FClusterCenterX")]
+    public double FCenterX { get; set; }
+
+    [CascadingParameter(Name = "FClusterCenterY")]
+    public double FCenterY { get; set; }
+
+    [CascadingParameter(Name = "IsHovered")]
+    public bool IsHovered { get; set; }
+
+    [Parameter]
+    public Dictionary<Guid, Template> Templates { get; set; }
+
+    [Parameter]
+    public double Radius { get; set; }
+
+    public double Padding { get; set; }
+    
+    public string Color { get; set; }
+    
+    public double SpiralVariable = 1;
+
+    public bool IsClear = false;
+    public int DoneCounter = 0;
+
+    protected override bool ShouldRender()
+    {
+        if (DoneCounter >= Templates.Count)
+            return false;
+        return base.ShouldRender();
+    }
+
+    private void IncrementSpiral(IEntity entity)
+    {
+        while (Templates.Values.Any(k => ComponentHelper.Distance(ComponentHelper.PlaceX(SpiralVariable), ComponentHelper.PlaceY(SpiralVariable), k.X, k.Y)
+                                            < Radius + Padding))
+        {
+            SpiralVariable += Radius + Padding;
+        }
+        entity.X = ComponentHelper.PlaceX(SpiralVariable);
+        entity.Y = ComponentHelper.PlaceY(SpiralVariable);
+    }
+
+    protected override void OnInitialized()
+    {
+        Color = "red";
+        Radius = 4;
+        Padding = 5;
+
+
+    //var radius = 4;
+    //var padding = 5;
+    //for (var i = 0; i <= 2; i++)
+    //{
+    //    while (Templates.Values.Any(k => ComponentHelper.Distance(ComponentHelper.PlaceX(SpiralVariable), ComponentHelper.PlaceY(SpiralVariable), k.X, k.Y)
+    //                                     < k.Size + radius + padding))
+    //    {
+    //        SpiralVariable++;
+    //    }
+    //    var template = new Template(ComponentHelper.PlaceX(SpiralVariable), ComponentHelper.PlaceY(SpiralVariable), 4);
+    //    Templates.Add(Guid.NewGuid(), template);
+    //    if (i % 50 == 0)
+    //        radius++;
+    //}
+    }
+    
+}

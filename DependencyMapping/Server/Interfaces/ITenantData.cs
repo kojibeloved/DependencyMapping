@@ -4,8 +4,8 @@ namespace DependencyMapping.Server.Interfaces
 {
     public interface ITenantData
     {
-        public List<Template> GetTemplates();
-        public List<CustomFunction> GetCustomFunctions();
+        //public List<Template> GetTemplates();
+        //public List<CustomFunction> GetCustomFunctions();
 
     }
 }

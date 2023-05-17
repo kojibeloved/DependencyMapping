@@ -1,8 +1,19 @@
 ﻿@page "/"
 @inject IJSRuntime JsRuntime;
+@using System
+@using System.Drawing
+@using System.Windows.Input
 @using System.ComponentModel.Design.Serialization
-@using DependencyMapping.Shared.Models
+@using System.Net
+@using Amazon.Runtime.Documents
+@using DependencyMapping.Client.Components
+@using DependencyMapping.Client.Helpers
+@using DependencyMapping.Client.Models
+@using MongoDB.Bson
 @inject MouseService mouseSrv;
+@inject IFunctionService FunctionService;
+@inject ITemplateService TemplateService;
+@inject HttpClient Http
 
 <svg id="universeHolder" class="h-100 w-100" xmlns="http://www.w3.org/2000/svg"
      @onmousemove=@(e => mouseSrv.FireMove(this, e))
@@ -11,55 +22,96 @@
     <Panzoom @ref="_panzoom" WheelMode="WheelMode.ZoomWithWheel">
         <!-- Must set the element's reference (@ref)! -->
         <g @ref="@context.ElementReference">
-            <Cluster CenterX="100" CenterY="100"/>
+            <CascadingValue Value="@TClusterCenterX" Name="TClusterCenterX">
+                <CascadingValue Value="@FClusterCenterX" Name="FClusterCenterX">
+                    <CascadingValue Value="@TClusterCenterY" Name="TClusterCenterY">
+                        <CascadingValue Value="@FClusterCenterY" Name="FClusterCenterY">
+                            <CascadingValue Value="@IsHovered" Name="IsHovered">
+                                <TemplateCluster Templates="Templates"/>
+                                <FunctionCluster Functions="Functions"/>
+                                @foreach (var template in Templates.Values)
+                                {
+                                    @foreach (var dependency in template.DependencyIds)
+                                    {
+                                        Tuple<double, double> dCoordinates = FindKeyCord(dependency);
+                                        <Connector @ref="template.Connectors[dependency]" Dir1="Connector.Direction.Left" X1="template.X + TClusterCenterX" Y1="template.Y + TClusterCenterY" Dir2="Connector.Direction.Right"
+                                                   X2="dCoordinates.Item1 + FClusterCenterX" Y2="dCoordinates.Item2 + FClusterCenterY"/>
+                                    }
+                                }
+                                @foreach (var function in Functions.Values)
+                                {
+                                    @foreach (var dependency in function.DependencyIds)
+                                    {
+                                        Tuple<double, double> dCoordinates = FindKeyCord(dependency);
+                                        <Connector @ref="function.Connectors[dependency]" Dir1="Connector.Direction.Left" X1="function.X + FClusterCenterX" Y1="function.Y + FClusterCenterY"
+                                                   Dir2="Connector.Direction.Right" X2="dCoordinates.Item1 + TClusterCenterX" Y2="dCoordinates.Item2 + TClusterCenterY"/>
+                                    }
+                                }
+                            </CascadingValue>
+                        </CascadingValue>
+                    </CascadingValue>
+                </CascadingValue>
+            </CascadingValue>
         </g>
     </Panzoom>    
 </svg>
 
 @code {
     private Panzoom _panzoom;
-
-
-    //stats for circles
-    //static double e1x = 290;
-    //double e1y = 250;
-
-    //static double e2x = 1090;
-    //double e2y = 850;
-
-    //string e1Color = "green";
-    //string e2Color = "red";
-
-    //double surfaceX = e1x + radius;
-    //double surfaceX2 = e2x - radius;
-
-    //public static double radius = 55;
-
-    //public double X;
-    //public double Y;
-    //public double R;
-    //public Connector.Direction Dir;
-    //public double RootX;
-    //public string Fill = "#333";
-
-
-    //public double ConnectY => Dir == Connector.Direction.Left ? Y - R : Y + R;
+    public Dictionary<Guid, Template> Templates = new();
+    public Dictionary<Guid, CustomFunction> Functions = new();
+    private List<Template> templateList;
     
+    public double TClusterCenterX { get; set; }
+    public double TClusterCenterY { get; set; }
+    public double FClusterCenterX { get; set; }
+    public double FClusterCenterY { get; set; }
+    
+    private Connector connectorRef;
 
-    //protected override async Task OnAfterRenderAsync(bool firstRender)
-    //{
-    //    await JsRuntime.InvokeAsync<object>("initRenderJS", DotNetObjectReference.Create(this));
-    //    await base.OnInitializedAsync();
-    //}
-    //private PanzoomOptions _options = new() {Canvas = true};
+    public bool IsHovered { get; set; } = false;
 
-    //private async Task OnWheel(CustomWheelEventArgs args)
-    //{
-    //    await _panzoom.ZoomWithWheelAsync(args);
-    //}
+    public Tuple<double, double> FindKeyCord(Guid dependency)
+    {
+        if (Functions.ContainsKey(dependency))
+            return Tuple.Create(Functions[dependency].X, Functions[dependency].Y);
 
-    //private async Task OnSetTransform(SetTransformEventArgs eventArgs)
-    //{
-    //    await _panzoom.SetStyleAsync("transform", $"rotate({eventArgs.X / 20}deg) scale({eventArgs.Scale}) translate({eventArgs.X}px, {eventArgs.Y}px)");
-    //}
+        return Tuple.Create(Templates[dependency].X, Templates[dependency].Y);
+    }
+    
+    protected override void OnInitialized()
+    {
+        double spiralVariable = 1;
+        const int entityCount = 3;
+        const int entitySize = 4;
+        var radius = 4;
+        var padding = 5;
+
+        TClusterCenterX = 100;
+        TClusterCenterY = 100;
+        FClusterCenterX = 1000;
+        FClusterCenterY = 200;
+
+        for (var i = 0; i<=entityCount; i++)
+        {
+            
+            var template = new Template(Guid.NewGuid(), $"template_{i}",ComponentHelper.PlaceX(spiralVariable),
+                ComponentHelper.PlaceY(spiralVariable),
+                entitySize);
+            var customFunction = new CustomFunction(Guid.NewGuid(), $"customFunction_{i}", ComponentHelper.PlaceX(spiralVariable),
+                ComponentHelper.PlaceY(spiralVariable),
+                entitySize);
+
+            template.DependencyIds.Add(customFunction.Id);
+            template.Connectors.Add(customFunction.Id, new Connector());
+            customFunction.DependencyIds.Add(template.Id);
+            customFunction.Connectors.Add(template.Id, new Connector());
+            Templates.Add(template.Id, template);
+            Functions.Add(customFunction.Id, customFunction);
+            spiralVariable += 50;
+
+        }
+        
+        base.OnInitialized();
+    }
 }

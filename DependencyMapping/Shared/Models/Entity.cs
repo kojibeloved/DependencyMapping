@@ -9,29 +9,29 @@ using System.Threading.Tasks;
 
 namespace DependencyMapping.Shared.Models
 {
-    public class Template
+    public class Entity
     {
-        //[BsonId]
-        //[BsonRepresentation(BsonType.ObjectId)]
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
         public Guid Id { get; set; }
-        public string Name { get; set; }
 
-        public List<Guid> DependencyIds { get; set; }
-        
+        [Required]
+        public string? FileName { get; }
+
         public bool ShowConnections { get; set; } = false;
+
+        public List<Guid> Connections { get; set; }
 
         public double X { get; set; }
         public double Y { get; set; }
         public double Size { get; set; }
 
-        public Template(Guid id, string name, double x, double y, int size)
+        public Entity(double x, double y, int size)
         {
-            Id = id;
-            Name = name;
             X = x;
             Y = y;
             Size = size;
-            DependencyIds = new();
+            Connections = new();
         }
     }
 }

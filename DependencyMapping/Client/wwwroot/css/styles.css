@@ -6,7 +6,6 @@
 }
 
 svg {
-    fill: aqua;
     background-color: lightgray;
     width: 100vw;
     height: 100vh;
@@ -25,16 +24,4 @@ svg {
     user-select: none;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     fill: #333333;
-}
-    
-
-.entity-title {
-    fill: black;
-    pointer-events: none !important;
-}
-
-.entity {
-    /*fill: #ff6600;*/
-    stroke: black;
-    stroke-width: 1;
 }
