@@ -1,0 +1,44 @@
+﻿@using System.Drawing
+@using System.Reflection.Metadata
+@using Amazon.Runtime.Internal
+@using DependencyMapping.Shared.Models
+@using Microsoft.JSInterop;
+@inject IJSRuntime JsRuntime;
+
+<circle r="@Radius" stroke="black" stroke-width="1" fill="@Color" cx="@X" cy="@Y"/>
+
+@code
+{
+    [Parameter]
+    public double Radius { get; set; }
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    double? x;
+
+    [Parameter]
+    public string Color { get; set; }
+
+    [Parameter]
+    public double X { get; set; }
+
+    double? y;
+
+    [Parameter]
+    public double Y { get; set; }
+
+    public Connector.Direction DeterminePositionOfConnection(double x1, double y1, double x2, double y2)
+    {
+        if (x1 < x2 && y1 < y2)
+            return Connector.Direction.Left;
+        else if (x1 > x2 && y1 > y2)
+            return Connector.Direction.Right;
+        else if (x1 < x2 && y1 > y2)
+            return Connector.Direction.Top;
+
+        return Connector.Direction.Bottom;
+    }
+
+
+}
