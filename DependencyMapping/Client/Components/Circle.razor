@@ -42,14 +42,7 @@
 
     public void ToggleMenu()
     {
-        if (!Toggled)
-        {
-            menuRef.ShowDependency();
-        }
-        else
-            menuRef.HideDependency();
-        //menuRef.DisplayState = !Toggled ? "block" : "none";
-        Toggled = !Toggled;
+        menuRef.ToggleMenu();
     }
 
     public Connector.Direction DeterminePositionOfConnection(double x1, double y1, double x2, double y2)

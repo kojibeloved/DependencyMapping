@@ -1,8 +1,8 @@
-﻿rect {
+﻿.menu {
     position: relative;
-    background: black;
-    opacity: 0.5;
-    fill: black;
+    fill: white;
+    stroke: black;
+    stroke-width: 0.3;
 }
 
 /*rect {
