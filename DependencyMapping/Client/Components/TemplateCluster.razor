@@ -15,7 +15,11 @@
             IncrementSpiral(template.Value);
         }
         <g @onmouseover="@template.Value.ShowDependencies" @onmouseout="@template.Value.HideDependencies">
-            <Circle X="template.Value.X" Y="template.Value.Y" Radius="@Radius" Color="@Color"/>
+            <CascadingValue Value="template.Value.Name" Name="Name">
+                <CascadingValue Value="template.Value.DependencyIds">
+                    <Circle X="template.Value.X" Y="template.Value.Y" Radius="@Radius" Color="@Color"/>
+                </CascadingValue>
+            </CascadingValue>
         </g>
 
     }

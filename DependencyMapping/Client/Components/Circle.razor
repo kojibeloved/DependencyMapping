@@ -2,9 +2,11 @@
 @using System.Reflection.Metadata
 @using Amazon.Runtime.Internal
 @using DependencyMapping.Shared.Models
-@using Microsoft.JSInterop;
-@inject IJSRuntime JsRuntime;
-<g @onclick="ToggleMenu">
+@using Microsoft.JSInterop
+@inject IJSRuntime JSRuntime
+
+<g @onclick="Toggle">
+    <title></title>
     <circle r="@Radius" stroke="black" stroke-width="1" fill="@Color" cx="@X" cy="@Y"/>
     <CascadingValue Value="X" Name="X">
         <CascadingValue Value="Y" Name="Y">
@@ -15,34 +17,75 @@
 
 @code
 {
+
     [Parameter]
     public double Radius { get; set; }
 
     [Parameter]
     public RenderFragment? ChildContent { get; set; }
 
+    [CascadingParameter(Name = "Name")]
+    public string Name { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> ToggleCircle { get; set; }
+
+    [Parameter]
+    public bool Toggled { get; set; }
+
     double? x;
 
     [Parameter]
     public string Color { get; set; }
+
+    private string OriginalColor { get; set; }
 
     [Parameter]
     public double X { get; set; }
 
     public EntityMenu menuRef { get; set; } = new ();
 
-    public bool Toggled { get; set; } = false;
-
     double? y;
-
-    //bool Toggled;
 
     [Parameter]
     public double Y { get; set; }
 
-    public void ToggleMenu()
+    //private Task<IJSObjectReference> _module;
+    //private Task<IJSObjectReference> Module => _module ??= JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/Circle.razor.js").AsTask();
+    public async void Toggle()
     {
+        //await Submit();
+        //var module = await Module;
+        //var jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./scripts/utils.js");
+        // the jsruntime stunt causes the app to crash on s
         menuRef.ToggleMenu();
+        Toggled = !Toggled;
+        if (Toggled)
+        {
+            Color = "white";
+            //await jsModule.InvokeVoidAsync("addBodyClickListener");
+        }
+        else
+        {
+            Color = OriginalColor;
+            //await jsModule.InvokeVoidAsync("removeBodyClickListener");
+        }
+        await ToggleCircle.InvokeAsync(Toggled);
+        StateHasChanged();
+    }
+
+    [JSInvokable]
+    public void CloseMenu()
+    {
+        Toggled = false;
+        menuRef.ToggleMenu();
+        StateHasChanged();
+    }
+
+    protected override void OnParametersSet()
+    {
+        OriginalColor = Color;
+        base.OnParametersSet();
     }
 
     public Connector.Direction DeterminePositionOfConnection(double x1, double y1, double x2, double y2)
@@ -57,5 +100,12 @@
         return Connector.Direction.Bottom;
     }
 
-
+    //public async ValueTask DisposeAsync()
+    //{
+    //    if (_module != null)
+    //    {
+    //        var module = await _module;
+    //        await module.DisposeAsync();
+    //    }
+    //}
 }

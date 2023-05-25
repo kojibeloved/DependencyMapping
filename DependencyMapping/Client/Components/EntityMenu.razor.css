@@ -1,8 +1,53 @@
-﻿.menu {
+﻿.popout {
     position: relative;
     fill: white;
     stroke: black;
     stroke-width: 0.3;
+    z-index: 999;
+}
+
+/* Styles for the pop-out menu container */
+.menu-container {
+    position: relative;
+    display: inline-block;
+    z-index: 999;
+    fill: white;
+    stroke: black;
+    stroke-width: 0.3;
+}
+
+/* Styles for the component that triggers the menu */
+.menu-trigger {
+    cursor: pointer;
+}
+
+/* Styles for the pop-out menu */
+.popout-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 999;
+    width: 200px;
+    fill: whitesmoke;
+    stroke: black;
+    stroke-width: 0.3;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+}
+
+/* Styles for the menu items */
+.popout-menu .menu-item {
+    display: block;
+    padding: 8px 10px;
+    font-size: 14px;
+    color: #333;
+    transition: background-color 0.3s ease;
+}
+
+.popout-menu .menu-item:hover {
+    background-color: #f5f5f5;
 }
 
 /*rect {

@@ -1,6 +1,20 @@
 ﻿@using Amazon.Runtime.Internal
 
-<rect class="menu" x="@X" y="@Y" rx="5" width="20" height="@Height" style="display: @DisplayState;"/>
+<rect class="popout-menu" x="@X" y="@Y" rx="5" width="20" height="@Height" style="display: @DisplayState;">
+    <div class="menu-trigger" @onclick="ToggleMenu">
+        <!-- Use for show dependency popout menu -->
+        Click me to open the menu
+    </div>
+    @if (IsVisible)
+    {
+        <div class="popout-menu">
+            <!-- Menu items -->
+            <div class="menu-item">Item 1</div>
+            <div class="menu-item">Item 2</div>
+            <div class="menu-item">Item 3</div>
+        </div>
+    }
+</rect>
 
 @code {
     //[Parameter]
@@ -10,11 +24,14 @@
 
     private string DisplayState => IsVisible ? "block" : "none";
 
-    [CascadingParameter(Name = "X")] 
+    [CascadingParameter(Name = "X")]
     public double X { get; set; }
 
     [CascadingParameter(Name = "Y")]
     public double Y { get; set; }
+
+    [CascadingParameter(Name = "Name")]
+    public string Name { get; set; }
 
     public double Height { get; set; } = 30;
 
@@ -28,22 +45,8 @@
 
     protected override void OnInitialized()
     {
-        
+
         base.OnInitialized();
     }
 
-    //private bool _value;
-    //[Parameter]
-    //public bool Value
-    //{
-    //    get { return _value; }
-    //    set
-    //    {
-    //        if (_value != value)
-    //        {
-    //            _value = value;
-    //            ValueChanged.InvokeAsync(_value);
-    //        }
-    //    }
-    //}
 }

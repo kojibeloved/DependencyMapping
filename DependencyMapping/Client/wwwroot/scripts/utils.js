@@ -1,14 +1,4 @@
-﻿window.getBoundingBox = (element) => {
-    const rect = element.getBoundingClientRect();
-    return {
-        left: rect.left,
-        top: rect.top,
-        right: rect.right,
-        bottom: rect.bottom
-    };
-};
-
-window.addBodyClickListener = function () {
+﻿window.addBodyClickListener = function () {
     document.body.addEventListener('click', bodyClickListener);
 }
 

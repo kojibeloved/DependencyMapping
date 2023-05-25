@@ -1,24 +1,15 @@
 ﻿circle {
-
+    z-index: 100;
 }
     circle:hover {
-        color: white;
+        fill: white;
     }
 
-rect {
-    display: none;
-    position: relative;
-    height: 30px;
-    width: 15px;
-    -webkit-appearance: none;
-    background: black;
-    outline: white;
-    opacity: 0.5;
-}
-
-rect:before {
-    display: block;
-}
+    circle:checked {
+        fill: white;
+    }
+    
+    
 .entity-title {
     fill: black;
     pointer-events: none !important;
