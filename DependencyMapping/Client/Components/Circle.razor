@@ -49,36 +49,20 @@
 
     [Parameter]
     public double Y { get; set; }
-
-    //private Task<IJSObjectReference> _module;
-    //private Task<IJSObjectReference> Module => _module ??= JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/Circle.razor.js").AsTask();
+    
     public async void Toggle()
     {
-        //await Submit();
-        //var module = await Module;
-        //var jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./scripts/utils.js");
-        // the jsruntime stunt causes the app to crash on s
         menuRef.ToggleMenu();
         Toggled = !Toggled;
         if (Toggled)
         {
             Color = "white";
-            //await jsModule.InvokeVoidAsync("addBodyClickListener");
         }
         else
         {
             Color = OriginalColor;
-            //await jsModule.InvokeVoidAsync("removeBodyClickListener");
         }
         await ToggleCircle.InvokeAsync(Toggled);
-        StateHasChanged();
-    }
-
-    [JSInvokable]
-    public void CloseMenu()
-    {
-        Toggled = false;
-        menuRef.ToggleMenu();
         StateHasChanged();
     }
 

@@ -28,13 +28,13 @@
                         <CascadingValue Value="@FClusterCenterY" Name="FClusterCenterY">
                             <CascadingValue Value="@IsHovered" Name="IsHovered">
                                 <TemplateCluster Templates="Templates"/>
-                                <FunctionCluster Functions="Functions"/>
+                                <FunctionCluster Functions="Functions" ChangeZIndex="@ChangeZIndex"/>
                                 @foreach (var template in Templates.Values)
                                 {
                                     @foreach (var dependency in template.DependencyIds)
                                     {
                                         Tuple<double, double> dCoordinates = FindKeyCord(dependency);
-                                        <Connector @ref="template.Connectors[dependency]" Dir1="Connector.Direction.Left" X1="template.X + TClusterCenterX" Y1="template.Y + TClusterCenterY" Dir2="Connector.Direction.Right"
+                                        <Connector @ref="template.Connectors[dependency]" Dir1="Connector.Direction.Right" X1="template.X + TClusterCenterX" Y1="template.Y + TClusterCenterY" Dir2="Connector.Direction.Left"
                                                    X2="dCoordinates.Item1 + FClusterCenterX" Y2="dCoordinates.Item2 + FClusterCenterY"/>
                                     }
                                 }
@@ -78,14 +78,18 @@
 
         return Tuple.Create(Templates[dependency].X, Templates[dependency].Y);
     }
+
+    public void ChangeZIndex(bool input)
+    {
+        if (input)
+            StateHasChanged();
+    }
     
     protected override void OnInitialized()
     {
         double spiralVariable = 1;
-        const int entityCount = 3;
-        const int entitySize = 4;
-        var radius = 4;
-        var padding = 5;
+        const int entityCount = 19;
+        const int entitySize = 2;
 
         TClusterCenterX = 100;
         TClusterCenterY = 100;
@@ -108,7 +112,7 @@
             customFunction.Connectors.Add(template.Id, new Connector());
             Templates.Add(template.Id, template);
             Functions.Add(customFunction.Id, customFunction);
-            spiralVariable += 50;
+            spiralVariable += 2;
 
         }
         

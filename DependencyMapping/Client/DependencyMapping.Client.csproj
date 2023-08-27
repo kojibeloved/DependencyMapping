@@ -7,11 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Components\Circle.razor.js" />
+    <None Remove="Components\Circle.razor.css" />
+    <None Remove="Components\EntityMenu.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\css\styles.css" />
+    <Content Include="Components\Circle.razor.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Components\Circle.razor.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Components\EntityMenu.razor.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
@@ -25,6 +34,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Shared\DependencyMapping.Shared.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\css\styles.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

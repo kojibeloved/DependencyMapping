@@ -19,7 +19,7 @@
         {
             IncrementSpiral(function.Value);
         }
-        <g @onmouseover="@function.Value.ShowDependencies" @onmouseout="@function.Value.HideDependencies">
+        <g @onmouseover="@function.Value.ShowDependencies" @onmouseout="@function.Value.HideDependencies" styles="z-index: @ZIndex">
             <CascadingValue Value="function.Value.Name" Name="Name">
                 <Circle X="function.Value.X" Y="function.Value.Y" Radius="@Radius" Color="@Color" Toggled="@Toggled" ToggleCircle="@ToggleCircle" />
             </CascadingValue>
@@ -47,12 +47,17 @@
 
     [Inject] 
     private IJSRuntime jsRuntime { get; set; }
-
+    
     public bool Toggled { get; set; } = false;
 
     public string Color => Toggled ? "white" : "green";
-    public double Radius { get; set; }
+    
+    public int ZIndex => Toggled ? 3 : 1;
 
+    [Parameter]
+    public EventCallback<bool> ChangeZIndex { get; set; }
+
+    public double Radius { get; set; }
     public double SpiralVariable = 1;
     public int DoneCounter = 0;
     public double Padding { get; set; }
@@ -64,11 +69,13 @@
         return base.ShouldRender();
     }
 
-    private void ToggleCircle(bool input)
+    private async void ToggleCircle(bool input)
     {
         Toggled = input;
+        await ChangeZIndex.InvokeAsync(Toggled);
         StateHasChanged();
     }
+
 
     private void IncrementSpiral(IEntity entity)
     {

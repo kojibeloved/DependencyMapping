@@ -1,7 +1,7 @@
 ﻿@using Amazon.Runtime.Internal
 
-<rect class="popout-menu" x="@X" y="@Y" rx="5" width="20" height="@Height" style="display: @DisplayState;">
-    <div class="menu-trigger" @onclick="ToggleMenu">
+<rect class="popout-menu" x="@X" y="@Y" rx="5" width="20" style="display: @DisplayState;">
+    <div @onclick="ToggleMenu">
         <!-- Use for show dependency popout menu -->
         Click me to open the menu
     </div>

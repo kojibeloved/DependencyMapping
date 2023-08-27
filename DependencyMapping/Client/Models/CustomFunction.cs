@@ -10,7 +10,7 @@ namespace DependencyMapping.Client.Models
         public string Name { get; set; }
         
         public List<Guid> DependencyIds { get; set; }
-
+        
         public Dictionary<Guid, Connector> Connectors { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
